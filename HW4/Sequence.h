@@ -62,8 +62,8 @@ public:
 
 	// Housekeeping functions
 	~Sequence();
-	Sequence(const Sequence& other);
-	Sequence& operator=(const Sequence& rhs);
+	Sequence(const Sequence<ItemType>& other);
+	Sequence<ItemType>& operator=(const Sequence<ItemType>& rhs);
 
 private:
 	// Representation:

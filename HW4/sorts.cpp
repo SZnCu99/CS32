@@ -105,9 +105,7 @@ bool compareSensorPtr(const Sensor* lhs, const Sensor* rhs)
 	//       how you can do it in one line by calling compareSensor.
 	return compareSensor(*lhs, *rhs);/////CHANGE MADE
 
-	// Just so this will compile for now, we'll pretend every comparison
-	// results in a tie, so there's no preferred ordering.
-	return false;  // Delete this line and write your code instead
+	
 }
 
 bool isSorted(const vector<Sensor>& s)
