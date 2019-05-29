@@ -1,14 +1,10 @@
-
-
 void removeOdds(vector<int>& v)
 {
-	for (vector<int>::size_type i = 0; i < v.size(); i++)
-	{
-		if ((v[i] % 2) != 0)
-		{
-			vector<int>::iterator pos = v.begin() + i;
-			v.erase(pos);
-			i--;
+	vector<int>::iterator k;
+	for (k = v.begin(); k != v.end(); k++) {
+		if (*k % 2 == 1) {
+			k = v.erase(k);
+			k--;
 		}
 	}
 }

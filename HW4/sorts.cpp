@@ -13,9 +13,8 @@ using namespace std;
 //  Set this to false to skip the insertion sort tests; you'd do this if
 //  you're sorting so many items that insertion_sort would take more time
 //  than you're willing to wait.
-
-const bool TEST_INSERTION_SORT = true;
-
+//
+	const bool TEST_INSERTION_SORT = true;
 //========================================================================
 
 //========================================================================
@@ -100,14 +99,11 @@ bool compareSensor(const Sensor& lhs, const Sensor& rhs)
 inline
 bool compareSensorPtr(const Sensor* lhs, const Sensor* rhs)
 {
-	// TODO: You implement this.  Using the same criteria as compareSensor,
+	//       Using the same criteria as compareSensor,
 	//       compare two Sensors POINTED TO by lhs and rhs.  Think about
 	//       how you can do it in one line by calling compareSensor.
-	return compareSensor(*lhs, *rhs);/////CHANGE MADE
 
-	// Just so this will compile for now, we'll pretend every comparison
-	// results in a tie, so there's no preferred ordering.
-	return false;  // Delete this line and write your code instead
+	return compareSensor(*lhs, *rhs);
 }
 
 bool isSorted(const vector<Sensor>& s)
@@ -125,35 +121,25 @@ bool isSorted(const vector<Sensor>& s)
 
 void insertion_sort(vector<Sensor>& s, bool comp(const Sensor&, const Sensor&))
 {
-	// TODO: Using the insertion sort algorithm (pp. 311-313), sort s
-	//       according to the ordering relationship passed in as the
-	//       parameter comp.
+		// TODO: Using the insertion sort algorithm (pp. 311-313), sort s
+		//       according to the ordering relationship passed in as the
+		//       parameter comp.
 
-	// Note:  The insertion sort algorithm on pp. 312-313 of the Carrano
-	// book 6th edition is incorrect; someone made a change from the 5th
-	// edition and messed it up.  See the errata page entry for page 313 at
-	// http://homepage.cs.uri.edu/~carrano/WMcpp6e
-
-	// Just to show you how to use the second parameter, we'll write code
-	// that sorts only a vector of 2 elements.  (This is *not* the
-	// insertion sort algorithm.)
-
-	// Note that if comp(x,y) is true, it means x must end up before y in the
-	// final ordering.
-	/*if (s.size() == 2 && comp(s[1], s[0]))
-		swap(s[0], s[1]);*/
-	for (int unsorted = 1; unsorted < s.size(); unsorted++)
-	{
-		Sensor nextItem = s[unsorted];
-		int loc = unsorted;
-		while (loc > 0 && comp(nextItem, s[loc - 1]))
-		{
-			s[loc] = s[loc - 1];
-			loc--;
+		// Note that if comp(x,y) is true, it means x must end up before y in the
+		// final ordering.
+		////if (s.size() == 2 && comp(s[1], s[0]))
+		////	swap(s[0], s[1]);
+	for (int i = 1; i < s.size(); i++) {
+		int temp = i;
+		for (int j = i - 1; j >= 0; j--) {
+			if (comp(s[j], s[temp]))
+				break;
+			else {
+				swap(s[temp], s[j]);
+				temp--;
+			}
 		}
-		s[loc] = nextItem;
 	}
-
 }
 
 // Report the results of a timing test
@@ -258,23 +244,20 @@ int main()
 
 		// TODO:  Create a vector of Sensor pointers, and set each pointer
 		//        to point to the corresponding Sensor in auxSensors.
-		vector<Sensor*> sensorptr;
-		for (vector<Sensor>::size_type i = 0; i < auxSensors.size(); i++)
-		{
-			sensorptr.push_back(&auxSensors[i]);
-		}
+		vector<Sensor*> pointers;
+		for (int i = 0; i < auxSensors.size(); i++)
+			pointers.push_back(&auxSensors[i]);
+		assert(pointers.size() == auxSensors.size());
 
 		// TODO:  Sort the vector of pointers using the STL sort algorithm
 		//        with compareSensorPtr as the ordering relationship.
-		sort(sensorptr.begin(), sensorptr.end(), compareSensorPtr);
+		sort(pointers.begin(), pointers.end(), compareSensorPtr);
 
 		// TODO:  Using the now-sorted vector of pointers, replace each Sensor
 		//        in sensors with the Sensors from auxSensors in the correct
 		//        order.
-		for (vector<Sensor>::size_type i = 0; i < sensorptr.size(); i++)
-		{
-			sensors[i] = *sensorptr[i];
-		}
+		for (int i = 0; i < sensors.size(); i++)
+			sensors[i] = *(pointers[i]);
 
 	} // auxSensors will be destroyed here
 

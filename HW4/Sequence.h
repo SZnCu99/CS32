@@ -3,67 +3,38 @@
 #ifndef SEQUENCE_INCLUDED
 #define SEQUENCE_INCLUDED
 
+//using ItemType = int;
 
-template <typename ItemType>
+template<typename ItemType>
 class Sequence
 {
 public:
 	Sequence();          // Create an empty sequence (i.e., one whose size() is 0).
+	
 	bool empty() const;  // Return true if the sequence is empty, otherwise false.
+	
 	int size() const;    // Return the number of items in the sequence.
 
 	int insert(int pos, const ItemType& value);
-	// Insert value into the sequence so that it becomes the item at
-	// position pos.  The original item at position pos and those that
-	// follow it end up at positions one higher than they were at before.
-	// Return pos if 0 <= pos <= size() and the value could be
-	// inserted.  (It might not be, if the sequence has a fixed capacity,
-	// e.g., because it's implemented using a fixed-size array.)  Otherwise,
-	// leave the sequence unchanged and return -1.  Notice that
-	// if pos is equal to size(), the value is inserted at the end.
 
 	int insert(const ItemType& value);
-	// Let p be the smallest integer such that value <= the item at
-	// position p in the sequence; if no such item exists (i.e.,
-	// value > all items in the sequence), let p be size().  Insert
-	// value into the sequence so that it becomes the item at position
-	// p.  The original item at position p and those that follow it end
-	// up at positions one higher than before.  Return p if the value
-	// was actually inserted.  Return -1 if the value was not inserted
-	// (perhaps because the sequence has a fixed capacity and is full).
 
 	bool erase(int pos);
-	// If 0 <= pos < size(), remove the item at position pos from
-	// the sequence (so that all items that followed that item end up at
-	// positions one lower than they were at before), and return true.
-	// Otherwise, leave the sequence unchanged and return false.
 
 	int remove(const ItemType& value);
-	// Erase all items from the sequence that == value.  Return the
-	// number of items removed (which will be 0 if no item == value).
 
 	bool get(int pos, ItemType& value) const;
-	// If 0 <= pos < size(), copy into value the item at position pos
-	// of the sequence and return true.  Otherwise, leave value unchanged
-	// and return false.
 
 	bool set(int pos, const ItemType& value);
-	// If 0 <= pos < size(), replace the item at position pos of the
-	// sequence with value and return true.  Otherwise, leave the sequence
-	// unchanged and return false.
 
 	int find(const ItemType& value) const;
-	// Let p be the smallest integer such that value == the item at
-	// position p in the sequence; if no such item exists, let p be -1.
-	// Return p.
 
 	void swap(Sequence& other);
-	// Exchange the contents of this sequence with the other one.
 
 	// Housekeeping functions
 	~Sequence();
-	Sequence(const Sequence& other);
-	Sequence& operator=(const Sequence& rhs);
+	Sequence(const Sequence<ItemType>& other);
+	Sequence<ItemType>& operator=(const Sequence<ItemType>& rhs);
 
 private:
 	// Representation:
@@ -101,26 +72,22 @@ private:
 };
 
 // Declarations of non-member functions
-template <typename ItemType>
+template<typename ItemType>
 int subsequence(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2);
-// If seq2 is a contiguous subsequence of seq1, return the position in
-// seq1 where that subsequence starts (the earliest such position if more
-// than one).  If not, or if seq2 is empty, return -1.
 
-template <typename ItemType>
+template<typename ItemType>
 void interleave(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2, Sequence<ItemType>& result);
-// Set result to a Sequence that interleaves seq1 and seq2.
 
 
 // Inline implementations
-template <typename ItemType>
+template<typename ItemType>
 inline
 int Sequence<ItemType>::size() const
 {
 	return m_size;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 inline
 bool Sequence<ItemType>::empty() const
 {
@@ -128,13 +95,13 @@ bool Sequence<ItemType>::empty() const
 }
 
 
-template <typename ItemType>
+template<typename ItemType>
 Sequence<ItemType>::Sequence()
 {
 	createEmpty();
 }
 
-template <typename ItemType>
+template<typename ItemType>
 Sequence<ItemType>::~Sequence()
 {
 	// Delete all Nodes from first non-dummy up to but not including
@@ -148,7 +115,7 @@ Sequence<ItemType>::~Sequence()
 	delete m_head;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 Sequence<ItemType>::Sequence(const Sequence<ItemType>& other)
 {
 	createEmpty();
@@ -161,18 +128,18 @@ Sequence<ItemType>::Sequence(const Sequence<ItemType>& other)
 		insertBefore(m_head, p->m_value);
 }
 
-template <typename ItemType>
+template<typename ItemType>
 Sequence<ItemType>& Sequence<ItemType>::operator=(const Sequence<ItemType>& rhs)
 {
 	if (this != &rhs)
 	{
-		Sequence temp(rhs);
+		Sequence<ItemType> temp(rhs);
 		swap(temp);
 	}
 	return *this;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 int Sequence<ItemType>::insert(int pos, const ItemType& value)
 {
 	if (pos < 0 || pos > m_size)
@@ -184,7 +151,7 @@ int Sequence<ItemType>::insert(int pos, const ItemType& value)
 	return pos;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 int Sequence<ItemType>::insert(const ItemType& value)
 {
 	// Find the Node before which to insert
@@ -199,7 +166,7 @@ int Sequence<ItemType>::insert(const ItemType& value)
 	return pos;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 bool Sequence<ItemType>::erase(int pos)
 {
 	if (pos < 0 || pos >= m_size)
@@ -211,7 +178,7 @@ bool Sequence<ItemType>::erase(int pos)
 	return true;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 int Sequence<ItemType>::remove(const ItemType& value)
 {
 	int count = 0;
@@ -232,7 +199,7 @@ int Sequence<ItemType>::remove(const ItemType& value)
 	return count;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 bool Sequence<ItemType>::get(int pos, ItemType& value) const
 {
 	if (pos < 0 || pos >= m_size)
@@ -244,7 +211,7 @@ bool Sequence<ItemType>::get(int pos, ItemType& value) const
 	return true;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 bool Sequence<ItemType>::set(int pos, const ItemType& value)
 {
 	if (pos < 0 || pos >= m_size)
@@ -256,7 +223,7 @@ bool Sequence<ItemType>::set(int pos, const ItemType& value)
 	return true;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 int Sequence<ItemType>::find(const ItemType& value) const
 {
 	// Walk through the list, keeping track of position
@@ -268,7 +235,7 @@ int Sequence<ItemType>::find(const ItemType& value) const
 	return p == m_head ? -1 : pos;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 void Sequence<ItemType>::swap(Sequence<ItemType>& other)
 {
 	// Swap head pointers
@@ -284,7 +251,7 @@ void Sequence<ItemType>::swap(Sequence<ItemType>& other)
 	m_size = s;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 void Sequence<ItemType>::createEmpty()
 {
 	m_size = 0;
@@ -296,7 +263,7 @@ void Sequence<ItemType>::createEmpty()
 	m_head->m_prev = m_head;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 void Sequence<ItemType>::insertBefore(Node* p, const ItemType& value)
 {
 	// Create a new node
@@ -314,7 +281,7 @@ void Sequence<ItemType>::insertBefore(Node* p, const ItemType& value)
 	m_size++;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 typename Sequence<ItemType>::Node* Sequence<ItemType>::doErase(Node* p)
 {
 	// Save pointer to p's successor
@@ -332,7 +299,7 @@ typename Sequence<ItemType>::Node* Sequence<ItemType>::doErase(Node* p)
 	return pnext;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 typename Sequence<ItemType>::Node* Sequence<ItemType>::nodeAtPos(int pos) const
 {
 	Node* p;
@@ -356,7 +323,7 @@ typename Sequence<ItemType>::Node* Sequence<ItemType>::nodeAtPos(int pos) const
 	return p;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 int subsequence(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2)
 {
 	if (seq2.empty())
@@ -396,7 +363,7 @@ int subsequence(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2)
 	return -1;
 }
 
-template <typename ItemType>
+template<typename ItemType>
 void interleave(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2, Sequence<ItemType>& result)
 {
 	// Guard against the case that result is an alias for seq1 or seq2
@@ -439,6 +406,5 @@ void interleave(const Sequence<ItemType>& seq1, const Sequence<ItemType>& seq2, 
 
 	result.swap(res);
 }
-
 
 #endif // SEQUENCE_INCLUDED
